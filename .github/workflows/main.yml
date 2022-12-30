@@ -1,8 +1,5 @@
 name: publish-and-dispatch
-on:
-  push:
-    branches:
-      - main
+on: push
 jobs:
   release:
     name: Setup
