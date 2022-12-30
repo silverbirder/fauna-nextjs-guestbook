@@ -1,0 +1,23 @@
+name: publish-and-dispatch
+on:
+  push:
+    branches:
+      - main
+jobs:
+  release:
+    name: Setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: set val
+        id: schema
+        run: |
+          echo schema=$(cat schema.gql) >> $GITHUB_OUTPUT
+      - name: dispatch update-packages
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          repository: silverbirder/myapp_front
+          token: ${{ secrets.PAT }}
+          event-type: create-pull-request-schema
+          client-payload: '{"github": ${{ toJSON(steps.schema.outputs.schema) }}}'
